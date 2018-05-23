@@ -65,6 +65,7 @@ class ListViewAdapter extends BaseAdapter{
         if (view == null) {
             view = inflater.inflate(R.layout.listview_item, null);
         }
+
         // Set the results into TextViews
 //        Log.d(TAG, "getView: " + list.all.get(position).symbol);
         hId = view.findViewById(R.id.pairId);
@@ -73,6 +74,12 @@ class ListViewAdapter extends BaseAdapter{
         hId.setText(String.valueOf(list.all.get(position).pairID));
         hName.setText(list.all.get(position).name);
         hSymbol.setText(list.all.get(position).symbol);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RetrofitHelper.getInstance().doPairRequest(hId.getText().toString());
+            }
+        });
         return view;
     }
 

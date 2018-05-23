@@ -1,13 +1,21 @@
 package com.greyogproducts.greyog.searchproto;
 
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Switch;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -91,5 +99,31 @@ public class MainActivityFragment extends Fragment implements SearchView.OnQuery
     @Override
     public void onResponse(MyResponseResult responseResult) {
         adapter.setNewData(responseResult);
+    }
+
+    @Override
+    public void onResponseTechData(String raw) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this.getContext());
+        alert.setTitle("Title here");
+
+        WebView wv = new WebView(this.getContext());
+        wv.loadData(raw, null, null);
+        wv.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+
+                return true;
+            }
+        });
+
+        alert.setView(wv);
+        alert.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        alert.show();
     }
 }
